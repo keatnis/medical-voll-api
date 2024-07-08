@@ -1,8 +1,9 @@
-# voll Medic Rest API
+# Voll Medic Rest API
 
 ## Descripcion de proyecto
 
 Este aplicativo  permite registrar, actualizar y eliminar registros de la base de datos.
+
 Usando los metodos de Http: POST, GET, PUT y  DELETE.
 
 ## 🌟 Funcionalidades:
@@ -29,5 +30,7 @@ Uso de Flyway par aversionado de base de datos.
 - DevTools
   
 ## Autores
+
 Alura- Next Education G6
+
 🐈 Keatnis - Ma. Torres
