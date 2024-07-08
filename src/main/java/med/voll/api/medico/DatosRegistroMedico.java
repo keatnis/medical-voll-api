@@ -18,7 +18,7 @@ public record DatosRegistroMedico(
         @Pattern(regexp = "\\d{10}")
         String telefono,
         @NotBlank
-        //para agregar expresiones regulares
+        //para agregar expresiones regulares usamos @Pattern
         @Pattern(regexp = "\\d{4,6}")
         String documento,
         @NotNull
