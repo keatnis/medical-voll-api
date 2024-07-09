@@ -1,7 +1,4 @@
-package med.voll.api.medico;
-
-import lombok.Getter;
-import lombok.Setter;
+package med.voll.api.domain.medico;
 
 
 public record DatosListadoMedico(Long id,String nombre, String especialidad, String documento, String email) {

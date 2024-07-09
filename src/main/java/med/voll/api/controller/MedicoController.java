@@ -2,12 +2,14 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.medico.*;
+import med.voll.api.domain.medico.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/medicos")
@@ -16,19 +18,22 @@ public class MedicoController {
     @Autowired
     private MedicoRepository medicoRepository;
 
-    @PostMapping
 
+    @PostMapping
     //agregamos la anotacion @Valid para validar las entradas
-    public void registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico) {
-        medicoRepository.save(new Medico(datosRegistroMedico));
+    public ResponseEntity registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico, UriComponentsBuilder uriComponentsBuilder) {
+        var medico = medicoRepository.save(new Medico(datosRegistroMedico));
+        var uri = uriComponentsBuilder.path("medicos/{id}").buildAndExpand(medico.getId()).toUri();
+        return ResponseEntity.created(uri).body(new DatosRespuestaMedico(medico));
     }
 
     @GetMapping
-    public Page<DatosListadoMedico> listadoMedicos(@PageableDefault(size = 2, sort = {"nombre"}) Pageable pageable) {
+    public ResponseEntity<Page<DatosListadoMedico>> listadoMedicos(@PageableDefault(size = 2, sort = {"nombre"}) Pageable pageable) {
         //esto permite traer solo los datos especificados en el dto
         //  return medicoRepository.findAll().stream().map(DatosListadoMedico::new).toList();
-   //     return medicoRepository.findAll(pageable).map(DatosListadoMedico::new);
-        return medicoRepository.findByActivoTrue(pageable).map(DatosListadoMedico::new);
+        //     return medicoRepository.findAll(pageable).map(DatosListadoMedico::new);
+        var page = medicoRepository.findByActivoTrue(pageable).map(DatosListadoMedico::new);
+        return ResponseEntity.ok(page);
 
     }
 
@@ -39,9 +44,10 @@ public class MedicoController {
      */
     @PutMapping
     @Transactional
-    public void actualizarMedico(@RequestBody @Valid DatosActualizarMedico datosActualizarMedico) {
+    public ResponseEntity actualizarMedico(@RequestBody @Valid DatosActualizarMedico datosActualizarMedico) {
         Medico medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
         medico.actualizarDatos(datosActualizarMedico);
+        return ResponseEntity.ok(new DatosRespuestaMedico(medico));
     }
     // metodo para elimnar los datos en la base de datos
     /*
@@ -56,11 +62,13 @@ public class MedicoController {
     //DETELE LOGICO: no eliminamos los datos en la base de datos
     @DeleteMapping("/{id}")
     @Transactional
-    public void eliminarMedico(@PathVariable Long id){
+    public ResponseEntity eliminarMedico(@PathVariable Long id) {
         Medico medico = medicoRepository.getReferenceById(id);
-      // medico.desactivarMedico(medico);
+        // medico.desactivarMedico(medico);
         medico.desactivarMedico();
+        return ResponseEntity.noContent().build();
     }
+
     /*
         Exclusion de medicos
         Reglas del negocio:
@@ -70,6 +78,10 @@ public class MedicoController {
         usamos path variable desde url enviado por el cliente
         http://localhost:8080/medicos/6
      */
-
-
+//se encargará de devolver los datos de un paciente:
+    @GetMapping("/{id}")
+    public ResponseEntity detallar(@PathVariable Long id) {
+        var medico = medicoRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DatosRespuestaMedico(medico));
+    }
 }

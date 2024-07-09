@@ -1,7 +1,6 @@
-package med.voll.api.direccion;
+package med.voll.api.domain.direccion;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,5 +33,14 @@ public class Direccion {
         this.numero = direccion.numero();
         this.complemento = direccion.complemento();
         return this;
+    }
+
+    public void atualizarInformacion(DatosActualizacionDireccion direccion) {
+        this.calle = direccion.calle();
+        this.distrito = direccion.distrito();
+        this.ciudad = direccion.ciudad();
+        this.numero = direccion.numero();
+        this.complemento = direccion.complemento();
+       // confirmar el funcionamient, de lo contrario seria uno de tipo Direccion
     }
 }
