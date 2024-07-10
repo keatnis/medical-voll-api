@@ -12,4 +12,4 @@ create table pacientes(
     provincia varchar(100) not null,
     ciudad varchar(100) not null,
 
-    primary key(id)
+    primary key(id) )
