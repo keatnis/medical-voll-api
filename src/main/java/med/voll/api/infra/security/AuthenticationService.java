@@ -1,4 +1,4 @@
-package med.voll.api.security;
+package med.voll.api.infra.security;
 
 
 import med.voll.api.domain.usuarios.UsuarioRepository;
