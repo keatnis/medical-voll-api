@@ -21,6 +21,13 @@ public class ManejadorDeErrores {
         return ResponseEntity.badRequest().body(errores.stream().map(DatosErrorValidacion::new).toList());
     }
 
+    @ExceptionHandler(ValidacionDeIntegridad.class)
+    public ResponseEntity errorHandlerValidacionesIntegridad(Exception e){
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+
+
     private record DatosErrorValidacion(String campo, String mensaje) {
         public DatosErrorValidacion(FieldError error) {
             this(error.getField(), error.getDefaultMessage());

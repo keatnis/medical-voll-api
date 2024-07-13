@@ -5,7 +5,7 @@ import lombok.*;
 import med.voll.api.domain.direccion.Direccion;
 
 @Entity(name = "Medico")
-@Table(name = "medico")
+@Table(name = "medicos")
 
 
 @AllArgsConstructor
